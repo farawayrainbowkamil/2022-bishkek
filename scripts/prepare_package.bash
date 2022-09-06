@@ -45,10 +45,10 @@ then
         "Please replace the tabs with spaces before checking in or creating a package."
 fi
 
-ls -d ./day*/lab*/ | xargs -n 1 cp {top.,x_,xx_,run_icarus,run_questa}* \
+ls -d ./day*/lab*/ | xargs -n 1 cp scripts/{top.,x_,xx_,run_icarus,run_questa}* \
   || error "cannot copy the required scripts to ../day*/lab* subdirectories"
 
-ls -d ./day*/homework/ | xargs -n 1 cp run_all* \
+ls -d ./day*/homework/ | xargs -n 1 cp scripts/run_all* \
   || error "cannot copy run_all scripts to ../day*/homework subdirectories"
 
 ls -d ./day*/lab*/ | xargs -I % touch %top_extra.qsf \
@@ -69,7 +69,7 @@ cp ./day_2/lab_07_note_recognition/digilent_pmod_mic3_spi_receiver.sv \
   || error "cannot create local copies of files for music recognition"
 
 cp ./day_1/lab_03_vga/vga.sv ./day_3/lab_10_game \
-  || error "cannot create a local copy of VGA file"
+  || error "cannot create a local copy of VGAfile"
 
 if ! command -v zip &> /dev/null
 then
@@ -92,10 +92,10 @@ fi
 
 package_name=${root_name}_$(date '+%Y%m%d_%H%M%S')
 
-zip -r $pwd/$package_name.zip $root_name/{day,lecture,README,LICENSE}* \
+zip -r $package_name.zip ./{day,lecture,README,LICENSE}* \
   || error "cannot zip the full package"
 
-zip -r $pwd/${package_name}_labs_only_no_lecture.zip $root_name/{day,README,LICENSE}* \
+zip -r ${package_name}_labs_only_no_lecture.zip ./{day,README,LICENSE}* \
   || error "cannot zip the labs-only no-lecture package"
 
 exit 0
