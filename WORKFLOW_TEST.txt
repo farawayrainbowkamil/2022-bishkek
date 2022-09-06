@@ -1,1 +1,2 @@
 Some new change that should trigger
+Second line
