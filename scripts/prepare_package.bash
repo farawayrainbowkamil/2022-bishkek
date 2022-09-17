@@ -8,7 +8,7 @@ root_name=2022-bishkek
 
 script=$(basename "$0")
 pwd=$PWD
-root=$(readlink -e ..)
+root=$(readlink -e .)
 
 error ()
 {
@@ -16,7 +16,7 @@ error ()
   exit 1
 }
 
-git clean -d -f ..
+git clean -d -f .
 
 # Search for the text files with DOS/Windows CR-LF line endings
 
@@ -27,17 +27,17 @@ git clean -d -f ..
 # -U     - don't strip CR from text file by default
 # $'...' - string literal in Bash with C semantics ('\r', '\t')
 
-if [ "$OSTYPE" = linux-gnu ] && grep -rqIU $'\r$' ../*
+if [ "$OSTYPE" = linux-gnu ] && grep -rqIU $'\r$' ./*
 then
-  grep -rlIU $'\r$' ../*
+  grep -rlIU $'\r$' ./*
 
   error "there are text files with DOS/Windows CR-LF line endings." \
         "You can fix them by doing:\ngrep -rlIU \$'\\\\r\$' $root/* | xargs dos2unix"
 fi
 
-if grep -rqI $'\t' ../*
+if grep -rqI $'\t' ./*
 then
-  grep -rlI $'\t' ../*
+  grep -rlI $'\t' ./*
 
   error "there are text files with tabulation characters." \
         "Tabs should not be used." \
@@ -45,31 +45,31 @@ then
         "Please replace the tabs with spaces before checking in or creating a package."
 fi
 
-ls -d ../day*/lab*/ | xargs -n 1 cp {top.,x_,xx_,run_icarus,run_questa}* \
+ls -d ./day*/lab*/ | xargs -n 1 cp scripts/{top.,x_,xx_,run_icarus,run_questa}* \
   || error "cannot copy the required scripts to ../day*/lab* subdirectories"
 
-ls -d ../day*/homework/ | xargs -n 1 cp run_all* \
+ls -d ./day*/homework/ | xargs -n 1 cp scripts/run_all* \
   || error "cannot copy run_all scripts to ../day*/homework subdirectories"
 
-ls -d ../day*/lab*/ | xargs -I % touch %top_extra.qsf \
+ls -d ./day*/lab*/ | xargs -I % touch %top_extra.qsf \
   || error "cannot create top_extra.qsf in ../day*/lab* subdirectories"
 
-cp ../day_1/lab_02_7segment_letter/*.jpg ../day_2/lab_06_7segment_word \
+cp ./day_1/lab_02_7segment_letter/*.jpg ./day_2/lab_06_7segment_word \
   || error "cannot create a copy of pictures for 7segment example"
 
-fsm_asic_dir=../lecture/3_asic_openlane/src/OpenLane/designs/snail_moore_fsm/src
+fsm_asic_dir=./lecture/3_asic_openlane/src/OpenLane/designs/snail_moore_fsm/src
 mkdir -p $fsm_asic_dir
 
-cp ../day_3/lab_08_snail_fsm/snail_moore_fsm.sv $fsm_asic_dir \
+cp ./day_3/lab_08_snail_fsm/snail_moore_fsm.sv $fsm_asic_dir \
   || error "cannot create a copy of sources for ASIC flow"
 
-cp ../day_2/lab_07_note_recognition/digilent_pmod_mic3_spi_receiver.sv \
-   ../day_2/lab_07_note_recognition/music_notes.pdf \
-   ../day_3/lab_09_music_recognition \
+cp ./day_2/lab_07_note_recognition/digilent_pmod_mic3_spi_receiver.sv \
+   ./day_2/lab_07_note_recognition/music_notes.pdf \
+   ./day_3/lab_09_music_recognition \
   || error "cannot create local copies of files for music recognition"
 
-cp ../day_1/lab_03_vga/vga.sv ../day_3/lab_10_game \
-  || error "cannot create a local copy of VGA file"
+cp ./day_1/lab_03_vga/vga.sv ./day_3/lab_10_game \
+  || error "cannot create a local copy of VGAfile"
 
 if ! command -v zip &> /dev/null
 then
@@ -84,18 +84,18 @@ then
   exit 1
 fi
 
-rm -rf ${root_name}_*.zip \
-  || error "cannot remove old zip files"
+#rm -rf ${root_name}_*.zip \
+#  || error "cannot remove old zip files"
 
-cd $root/.. \
-  || error "something is wrong with directory structure or permissions"
+#cd $root/.. \
+#  || error "something is wrong with directory structure or permissions"
 
 package_name=${root_name}_$(date '+%Y%m%d_%H%M%S')
 
-zip -r $pwd/$package_name.zip $root_name/{day,lecture,README,LICENSE}* \
+zip -r $package_name.zip ./{day,lecture,README,LICENSE}* \
   || error "cannot zip the full package"
 
-zip -r $pwd/${package_name}_labs_only_no_lecture.zip $root_name/{day,README,LICENSE}* \
+zip -r ${package_name}_labs_only_no_lecture.zip ./{day,README,LICENSE}* \
   || error "cannot zip the labs-only no-lecture package"
 
 exit 0
